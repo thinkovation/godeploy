@@ -1,32 +1,33 @@
 {
-  "user": "your-username",
-  "host": "your-server.com",
+  "user": "ubuntu",
+  "host": "example.com",
   "port": "22",
-  "key": "/path/to/your/private/key",
-  "path": "/home/user/app",
-  "service": "your-app.service",
+  "key": "~/.ssh/id_rsa",
+  "path": "/home/ubuntu/app",
+  "service": "myapp",
   "output": "myapp",
   "entry": "main.go",
   "commands": [
-    "chmod +x /home/user/app/myapp",
-    "echo 'Deployment complete'"
+    "deploy",
+    "copyfiles",
+    "echo 'Deployment complete!'"
   ],
   "files": [
     {
-      "src": "config.yaml",
-      "dst": "/home/user/app/config.yaml",
-      "is_dir": false,
-      "executable": false
-    },
-    {
       "src": "assets",
-      "dst": "/home/user/app/assets",
+      "dst": "/home/ubuntu/app/assets",
       "is_dir": true,
       "executable": false
     },
     {
-      "src": "scripts/setup.sh",
-      "dst": "/home/user/app/setup.sh",
+      "src": "config.yaml",
+      "dst": "/home/ubuntu/app/config.yaml",
+      "is_dir": false,
+      "executable": false
+    },
+    {
+      "src": "scripts/start.sh",
+      "dst": "/home/ubuntu/app/start.sh",
       "is_dir": false,
       "executable": true
     }
