@@ -22,6 +22,8 @@ func Build(cfg *config.Config, buildDir string) error {
 	}
 
 	outputPath := filepath.Join(buildDir, cfg.Output)
+	fmt.Println("Building Go binary at:", outputPath)
+
 	buildCmd := exec.Command("go", "build", "-o", outputPath, cfg.Entry)
 	buildCmd.Env = append(os.Environ(), "GOOS=linux", "GOARCH=amd64")
 
@@ -31,7 +33,12 @@ func Build(cfg *config.Config, buildDir string) error {
 // DeployBinary copies the binary to the remote server
 func DeployBinary(client *ssh.Client, cfg *config.Config, buildDir string) error {
 	outputPath := filepath.Join(buildDir, cfg.Output)
-	return client.CopyFile(outputPath, filepath.Join(cfg.Path, cfg.Output), true)
+
+	// Join the cfg.Path and cfg.Output to create the remote path
+	// Use filepath.ToSlash to ensure the path is in the correct format for the remote server
+	remotePath := filepath.ToSlash(filepath.Join(cfg.Path, cfg.Output))
+
+	return client.CopyFile(outputPath, remotePath, true)
 }
 
 // DeployFiles copies additional files to the remote server
