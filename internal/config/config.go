@@ -3,6 +3,7 @@ package config
 import (
 	"encoding/json"
 	"flag"
+	"fmt"
 	"os"
 	"path"
 	"path/filepath"
@@ -41,6 +42,7 @@ func LoadConfig(path string) (*Config, error) {
 	if err := json.Unmarshal(data, &cfg); err != nil {
 		return nil, err
 	}
+	fmt.Println(cfg.Path)
 	return &cfg, nil
 }
 
@@ -102,7 +104,7 @@ func NewConfigFromFlags() (*Config, []string, bool, error) {
 	var cfg Config
 	var commands multiStringFlag
 	var fileFlags fileMappingFlag
-	
+
 	// Define and parse CLI flags
 	configPath := flag.String("config", "", "Path to config file (optional)")
 	user := flag.String("user", "ubuntu", "SSH username")
@@ -114,7 +116,7 @@ func NewConfigFromFlags() (*Config, []string, bool, error) {
 	output := flag.String("output", "myapp", "Name of output binary")
 	entry := flag.String("entry", "main.go", "Go entry file")
 	generateGitHubAction := flag.Bool("github", false, "Generate GitHub Actions workflow file")
-	
+
 	flag.Var(&commands, "cmd", "Additional commands to run on remote server (can be specified multiple times)")
 	flag.Var(&fileFlags, "file", "Additional files/folders to copy (format: src[:dst], can be specified multiple times)")
 	flag.Parse()
